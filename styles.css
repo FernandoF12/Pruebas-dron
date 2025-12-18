@@ -1,0 +1,14 @@
+
+.bolt {
+  background: rgb(255, 255, 255);
+  border-radius: 32px;
+  border: 3px solid #222;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 2px 4px;
+  box-sizing: border-box;
+  cursor: pointer;
+  height: 14px;
+  padding: 6px;
+  position: relative;
+  transition: opacity 0.3s;
+  width: 14px;
+}
