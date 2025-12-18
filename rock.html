@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Full‑screen 3‑D Model</title>
+
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #BDBCBA;
+    }
+
+    model-viewer {
+      width: 100vw;
+      height: 100vh;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <model-viewer
+      alt="Drone 3D Capture"
+      src="example/climbing-wall.glb"
+      ar
+      poster="example/loading-rock.webp"
+      shadow-intensity="1"
+      camera-controls
+      max-field-of-view="15deg"
+      min-field-of-view="3deg"
+      max-camera-orbit="45deg 120deg 120deg"
+      min-camera-orbit="-25deg 70deg 70deg"
+    >
+  </model-viewer>
+
+
+
+</body>
+</html>
