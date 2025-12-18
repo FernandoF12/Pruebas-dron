@@ -37,6 +37,11 @@
       min-camera-orbit="-25deg 70deg 70deg"
     >
 
+    <button id="route-1" class="label" slot="hotspot-0" data-position="-2.601957939332147m 1.815679155017645m -4.311418949831325m" data-normal="0.18257499492323637m -0.22261825842156752m 0.9576572885151184m" data-visibility-attribute="visible">
+        <strong>1</strong>
+        6b
+    </button>
+
     <button id="bolt-1" class="bolt" slot="hotspot-1" data-position="-2.601957939332147m 2.815679155017645m -4.311418949831325m" data-normal="0.18257499492323637m -0.22261825842156752m 0.9576572885151184m" data-visibility-attribute="visible"></button>
     <button class="bolt" slot="hotspot-2" data-position="-2.9495541624425865m 4.087001714912371m -4.626752884668023m" data-normal="-0.30406990092805924m 0.15557939522012887m 0.9398598550488999m" data-visibility-attribute="visible"></button>
     <button class="bolt" slot="hotspot-3" data-position="-3.131084092149445m 6.179873033552214m -4.81263472302867m" data-normal="-0.5680397942780828m 0.06386637229122291m 0.8205192737570961m" data-visibility-attribute="visible"></button>
@@ -44,12 +49,13 @@
     <button class="bolt" slot="hotspot-5" data-position="-2.1441034501853933m 9.882846093985561m -5.451227475028184m" data-normal="-0.669409110529829m 0.214721869684259m 0.7111863057026333m" data-visibility-attribute="visible"></button>
     <button class="bolt" slot="hotspot-6" data-position="-3.328472318080712m 11.710358854051934m -5.2432203553258505m" data-normal="0.7620656182086025m -0.0652130573448531m 0.644207459360785m" data-visibility-attribute="visible"></button>
     <button class="bolt" slot="hotspot-7" data-position="-3.8833762921577217m 12.638991027999793m -4.8999198210683685m" data-normal="0.5228892721233007m 0.26387755867981816m 0.8105278793006099m" data-visibility-attribute="visible"></button>
-    <button class="bolt" slot="hotspot-8" data-position="-4.349008683119692m 13.89525530873529m -4.714096812684883m" data-normal="0.6613499237775227m 0.28357812562910284m 0.6944060231479491m" data-visibility-attribute="visible"></button>
-    <button class="bolt" slot="hotspot-9" data-position="-4.4533918294608075m 13.651450594946098m -4.547394311085352m" data-normal="0.6679083618270384m -0.1321249287214811m 0.7324216158824545m" data-visibility-attribute="visible"></button>
+    <button class="bolt anchor" slot="hotspot-8" data-position="-4.349008683119692m 13.89525530873529m -4.714096812684883m" data-normal="0.6613499237775227m 0.28357812562910284m 0.6944060231479491m" data-visibility-attribute="visible"></button>
+    <button class="anchor" slot="hotspot-9" data-position="-4.4533918294608075m 13.651450594946098m -4.547394311085352m" data-normal="0.6679083618270384m -0.1321249287214811m 0.7324216158824545m" data-visibility-attribute="visible"></button>
+
+    <svg id="lines" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" class="lineContainer"></svg>
 
 </model-viewer>
 
-<svg id="lines" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" class="lineContainer"></svg>
 
 <script type="module">
     const modelViewer = document.querySelector('#model-viewer');
