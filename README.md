@@ -1,4 +1,4 @@
-## A simple example for displaying 3D drone-captured imagery in the browser.
+## Experimenting with 3D drone-captured imagery
 
 ### Example 1: rock climbing routes
 
