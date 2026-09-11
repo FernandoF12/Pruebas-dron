@@ -3,8 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mulas - Parque Aconcagua</title>
+  <title>Aconcagua - Mapa 3D Dron</title>
 
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Model Viewer -->
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 
   <style>
@@ -13,106 +19,147 @@
       height: 100%;
       margin: 0;
       padding: 0;
-      overflow: hidden;
-      background-color: #111111;
       font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    /* Contenedor del Mapa Satelital */
+    #mapa {
+      width: 100%;
+      height: 100vh;
+      z-index: 1;
+    }
+
+    /* Ventana Modal para el Visor 3D */
+    .modal-3d {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      display: none; /* Oculto por defecto */
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-3d.active {
+      display: flex;
+    }
+
+    .modal-contenido {
+      position: relative;
+      width: 90%;
+      height: 85%;
+      background: #111;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
     }
 
     model-viewer {
       width: 100%;
       height: 100%;
-      display: block;
     }
 
-    /* Contenedor de la botonera en la parte inferior */
-    .ui-controls {
+    /* Botón para cerrar la modal */
+    .btn-cerrar {
       position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 10px;
-      background: rgba(0, 0, 0, 0.65);
-      padding: 10px 16px;
-      border-radius: 30px;
-      backdrop-filter: blur(8px);
-      z-index: 10;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-    }
-
-    /* Estilos de los botones */
-    .btn {
-      background: #222222;
-      color: #ffffff;
-      border: 1px solid #444444;
+      top: 15px;
+      right: 15px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: none;
+      font-size: 20px;
       padding: 8px 16px;
-      border-radius: 20px;
+      border-radius: 50%;
       cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      transition: all 0.2s ease;
+      z-index: 1001;
+      backdrop-filter: blur(5px);
     }
 
-    .btn:hover {
-      background: #333333;
-      border-color: #666666;
-    }
-
-    .btn:active {
-      transform: scale(0.95);
+    .btn-cerrar:hover {
+      background: rgba(255, 255, 255, 0.4);
     }
   </style>
 </head>
 <body>
 
-  <model-viewer
-    id="dron-viewer"
-    alt="Captura 3D por dron - Mulas Parque Aconcagua"
-    src="example/odm_textured_model_geo.glb"
-    poster="example/loading.webp"
-    camera-controls
-    auto-rotate
-    shadow-intensity="1"
-    ar
-    max-camera-orbit="360deg 90deg auto"
-    min-field-of-view="10deg"
-    max-field-of-view="90deg">
+  <!-- Mapa Satelital -->
+  <div id="mapa"></div>
 
-    <!-- Botonera superpuesta sobre el modelo -->
-    <div class="ui-controls">
-      <button class="btn" id="btn-reset">Reiniciar Vista</button>
-      <button class="btn" id="btn-rotate">Pausar Rotación</button>
-      <button class="btn" id="btn-ar">Ver en AR</button>
+  <!-- Modal 3D superpuesto -->
+  <div class="modal-3d" id="modal-visor">
+    <div class="modal-contenido">
+      <button class="btn-cerrar" id="btn-cerrar">&times;</button>
+      <model-viewer
+        id="visor-3d"
+        src=""
+        alt="Modelo 3D Dron"
+        camera-controls
+        auto-rotate
+        ar>
+      </model-viewer>
     </div>
-
-  </model-viewer>
+  </div>
 
   <script>
-    const viewer = document.getElementById('dron-viewer');
-    const btnReset = document.getElementById('btn-reset');
-    const btnRotate = document.getElementById('btn-rotate');
-    const btnAr = document.getElementById('btn-ar');
+    // 1. Inicializar el mapa centrado en el Parque Aconcagua (Lat, Lng, Zoom)
+    const mapa = L.map('mapa').setView([-32.6532, -70.0108], 12);
 
-    // 1. Reiniciar la cámara a su posición inicial
-    btnReset.addEventListener('click', () => {
-      viewer.cameraControls = true;
-      viewer.cameraTarget = "auto auto auto";
-      viewer.cameraOrbit = "0deg 75deg auto";
-    });
+    // 2. Capa Satelital Gratuita (Esri World Imagery)
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    }).addTo(mapa);
 
-    // 2. Activar o desactivar la rotación automática
-    btnRotate.addEventListener('click', () => {
-      viewer.autoRotate = !viewer.autoRotate;
-      btnRotate.textContent = viewer.autoRotate ? 'Pausar Rotación' : 'Activar Rotación';
-    });
-
-    // 3. Activar el modo de Realidad Aumentada (en móviles soportados)
-    btnAr.addEventListener('click', () => {
-      if (viewer.canActivateAR) {
-        viewer.activateAR();
-      } else {
-        alert('La realidad aumentada no está disponible en este dispositivo/navegador.');
+    // 3. Datos de los campamentos con sus archivos GLB
+    const campamentos = [
+      {
+        nombre: "Plaza de Mulas",
+        lat: -32.6532,
+        lng: -70.0108,
+        glb: "example/odm_textured_model_geo.glb"
+      },
+      {
+        nombre: "Confluencia",
+        lat: -32.7212,
+        lng: -69.9324,
+        glb: "example/confluencia.glb"
       }
+    ];
+
+    // Elementos del DOM
+    const modal = document.getElementById('modal-visor');
+    const visor = document.getElementById('visor-3d');
+    const btnCerrar = document.getElementById('btn-cerrar');
+
+    // 4. Crear marcadores en el mapa para cada campamento
+    campamentos.forEach(camp => {
+      const marcador = L.marker([camp.lat, camp.lng]).addTo(mapa);
+      
+      // Popup explicativo al hacer clic en el marcador
+      const contenidoPopup = `
+        <div style="text-align: center;">
+          <h3 style="margin: 0 0 8px 0;">${camp.nombre}</h3>
+          <button onclick="abrirModelo('${camp.glb}')" style="background: #007bff; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">
+            Ver Fotogrametría 3D
+          </button>
+        </div>
+      `;
+      
+      marcador.bindPopup(contenidoPopup);
+    });
+
+    // 5. Función para abrir la ventana modal y cargar el archivo GLB correspondiente
+    function abrirModelo(rutaGlb) {
+      visor.src = rutaGlb;
+      modal.classList.add('active');
+    }
+
+    // 6. Cerrar modal y limpiar el visor para no consumir memoria GPU
+    btnCerrar.addEventListener('click', () => {
+      modal.classList.remove('active');
+      visor.src = ""; 
     });
   </script>
 
